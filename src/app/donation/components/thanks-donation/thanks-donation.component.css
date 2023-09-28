@@ -1,0 +1,8 @@
+.thanks-container{
+    display: flex;
+    justify-content: center;
+}
+
+.thanks-container>a{
+    display: inline-block;
+}

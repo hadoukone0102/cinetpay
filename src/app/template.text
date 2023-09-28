@@ -1,0 +1,10 @@
+<app-header></app-header>
+<div class="images"style="background-image:url('assets/image/fondEglise.jpg'); background-size: cover;">
+    <div class="opacity">
+        <div class="titre">
+            Qui êtes vous 
+        </div>
+    </div>
+</div>
+
+

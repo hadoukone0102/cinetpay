@@ -1,0 +1,20 @@
+/* button:disabled{
+    background-color: gray;
+} */
+
+.min_width_form{
+    min-width: 100%;
+}
+
+.rameau{
+    /* height: 50px; */
+    /* width: 400px; */
+    /* background-color: blue; */
+    /* scale: .5; */
+}
+
+.loading-indicator{
+    height: 34px;
+    width: 187.5px;
+    background-color: royalblue;
+}

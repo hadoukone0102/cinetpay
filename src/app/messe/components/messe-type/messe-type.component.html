@@ -1,0 +1,59 @@
+<app-header></app-header>
+<div class="main">
+    <h1 class="text-center text-light " style="padding-top: 100px;">
+        Quel type de demande de messe voulez-vous effectuer?
+    </h1>
+
+    <div class="container messe_type_container pt-5">
+        <div class="card">
+            <h2 class="card-title text-center pt-2">
+                QUOTIDIENNE
+            </h2>
+            <div class="card-body text-center">
+                <p>
+                    Faites un demande de messe pour un jour de l'année
+                </p>
+            </div>
+            <div class="card-footer text-center">
+                <a (click)="goToMesseQuotidienne()">Choisir</a>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2 class="card-title text-center pt-2">
+                NEUVAINE
+            </h2>
+            <div class="card-body text-center">
+                <p>
+                    Faites une demande messe pour
+                    neuf(9) jours consécutifs de 
+                    l’année.
+                </p>
+            </div>
+            <div class="card-footer text-center">
+                <a (click)="goToMesseNeuvaine()">Choisir</a>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2 class="card-title text-center pt-2">
+                TRENTAINE
+            </h2>
+            <div class="card-body text-center">
+                <p>
+                    Faites une demande messe pour
+                    trente(30) jours consécutifs soit
+                    un mois de l’année.
+                </p>
+            </div>
+            <div class="card-footer text-center">
+                <a (click)="goToMesseTrentaine()">Choisir</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container text-center pt-5">
+        <a (click)="goToEditDemand()" class="text-light edit-demand" style="cursor: pointer;">Modifier une demande de messe</a>
+    </div>
+</div>
+

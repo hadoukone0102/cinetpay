@@ -1,0 +1,553 @@
+<app-header></app-header>
+
+<div class="image-container">
+    
+       <div class="container-fluid d-flex align-items-start justify-content-center">
+
+        <form class="familyPoppins mb-3 marginTopForm d-flex align-items-center justify-content-center"  #registerForm="ngForm" (ngSubmit)="onSubmit()"  novalidate>
+            <div class="row d-flex align-items-center justify-content-center">
+
+                <!--=====================================================-->
+                <!--===============//ANCHOR -  FORM AMOUNT ==============-->
+                <!--=====================================================-->
+                <div *ngIf="isFormAmount" class=" col-sm-6 p-4 rounded-4" 
+                    style="background-color: #FFF5EB; min-width: 100%" >
+                    <h3 class="fw-bold text-center text-center ">FAIRE UN DON NON ANONYME</h3>
+                    <div class="text-center">
+                        <img class="rameau mb-2" src="assets/image/rameau.png" alt="Rameau">
+                    </div>
+                    <div class="mb-3 " >
+                        <input (click)="getAmount(500)" 
+                            #theFirstAmount [(ngModel)]="firstAmount"  
+                            type="radio" class="btn-check" name="firstAmount" 
+                            id="firstAmount" autocomplete="off" required>
+                        <label class="btn btn-sm fw-bold rounded-0 " style="text-align:center;width:35%;float:left;font-size:110%" for="firstAmount"><span class="number">500F</span></label>
+                            
+                        <input (click)="getAmount(1000)" 
+                            #theSecondAmount [(ngModel)]="secondAmount" 
+                            type="radio" class="btn-check" name="secondAmount" 
+                            id="secondAmount" autocomplete="off" required>
+                        <label class="btn btn-sm fw-bold rounded-0 " style="text-align:center;width:30%;float:left;font-size:110%" for="secondAmount"><span class="number">1000F</span></label>
+                            
+                        <input (click)="getAmount(2500)" 
+                            #theThirdPrice [(ngModel)]="thirdAmount" 
+                            type="radio" class="btn-check" name="thirdAmount" 
+                            id="thirdAmount" autocomplete="off" required>
+                        <label class="btn btn-sm fw-bold rounded-0 " style="text-align:center;width:35%;float:left;font-size:110%"  for="thirdAmount"><span class="number">2500F</span></label>
+                    
+                    </div><br><br>
+                    <div class="mb-3">                       
+                        <input  style="width:100%;margin:0 auto"
+                            FormControlName="argent" 
+                            pattern="^[0-9]{1,25}$" type="number" min="100"   
+                            #theAmount="ngModel" 
+                            [(ngModel)]="formData.montantDon" 
+                            class="form-control" 
+                            onkeypress="return event.charCode >= 48 && event.charCode <= 57" 
+                            name="price" placeholder="Montant" required [readonly]="isFixed">
+                        
+                            <div class="text-danger">
+                                <small  *ngIf="theAmount.touched && !isMultipleOf5()">
+                                    *Entrez un montant multiple de 5
+                                </small>
+                            </div>
+                        <div class="text-danger">
+                            <small  *ngIf="theAmount.errors?.['required'] && (theAmount.dirty || theAmount.touched) ">
+                                *Entrez un montant de don
+                            </small>
+                        </div>
+                        
+                        <div class="text-danger" *ngIf=" theAmount.errors?.['min'] && (theAmount.dirty || theAmount.touched)">
+                            <small>
+                            *Entrez au moins 100 Francs
+                            </small>
+                            
+                        </div>
+                        
+                    
+                    </div>
+                
+                    <div class="mb-3">
+                        <select style="position:center;width:100%;height:40px;font-family:'Poppins';color:black"
+                            (change)="onChangeDonationType(theTypeValue.value);"    
+                            [(ngModel)]="typeValue" 
+                            #theTypeValue="ngModel"
+                            name ="type"   
+                            form-select mt-3 required >
+                            <option *ngFor="let donationType of donationTypes.types_dons" value="{{donationType.id}}" selected >{{ donationType.libelle }}</option>
+                            <option value=0 selected >Autre</option>
+                        </select><br><br>
+                    <div class="invalid-feedback">
+                            <small *ngIf="theTypeValue.errors">
+                                *Choisissez un type de don
+                            </small>
+                    </div>
+                    <input [(ngModel)]="customType" style="width:100%; margin:0 auto; height:40px; border-radius:4px" 
+                        *ngIf="typeIsOther" type="text" name="input" 
+                        placeholder="Entrez votre type de don"><br>
+                
+                    </div>
+                
+                    <a (click)="goToDonationTypeMenu()">
+                        <button type="button" style="text-align: center;float:left" class="btn_back btn fw-bold">
+                            Retour
+                        </button>
+                    </a>
+                    <a (click)="switchPage(false, true, false)">
+                        <button style="text-align: center;float:right" type="button"
+                            [disabled]="customTypeFieldIsCorrect() || theAmount.errors ||  (theAmount.hasError('min500') || theAmount.touched) && theAmount.errors || theAmount.invalid && (theAmount.dirty || theAmount.touched) || theTypeValue.errors || !isMultipleOf5()"  
+                             class="btn_next btn  fw-bold">
+                            Suivant
+                        </button>
+                    </a>
+                </div>
+
+                <!--=====================================================-->
+                <!--================//ANCHOR -  FORM INFO ===============-->
+                <!--=====================================================-->
+                <div  class=" {{isFormInfo ? '': 'd-none'}}  col-sm-6  p-4 rounded-4"
+                    style="background-color: #FFF5EB">
+
+                                <h3 class="fw-bold text-center">FAIRE UN DON NON ANONYME</h3>
+                                <div class="text-center">
+                                    <img class="rameau mb-2" src="assets/image/rameau.png" alt="Rameau">
+                                </div>
+                                
+                                <div class="row d-flex justify-content-center">
+                                    <div class="row justify-content-between text-left">
+                                        <div class="form-group col-12 flex-column d-flex m-0" >
+                                            <div class="form-check">
+                                                <input class="form-check-input" 
+                                                    type="checkbox"
+                                                    [(ngModel)]="isOrga" 
+                                                    name="isOrga"                                        
+                                                    id="isOrga" >
+                                                <label class="form-check-label mb-2" for="isOrga">Organisation</label>
+                                            </div>
+                                        </div>
+                                        <div *ngIf="isOrga" class="form-group col-12 flex-column d-flex"> 
+                                            <div >
+                                                <input #theOrganisation="ngModel" 
+                                                    class="form-control" id="organisation" 
+                                                    name="organisation" 
+                                                    [(ngModel)]="formData.organisationDon" type="text" 
+                                                    placeholder="Nom de l'entreprise, de l'association, de l'organisation,etc...">
+                                            </div>
+                                         </div>
+                                     
+                                    </div>
+                                       
+                                    <div class="row justify-content-between text-left">
+                                        <div class="form-group col-lg-6 flex-column d-flex">
+                                            <select 
+                                                [(ngModel)]="formData.civiliteDon" style="height:40px" 
+                                                #theCivility="ngModel" name ="civility" 
+                                                form-select mt-3 required >
+
+                                                <!-- <option value="" disabled selected>Civilité</option> -->
+                                                <option value="Monsieur">Monsieur</option>   
+                                                <option value="Madame">Madame</option>   
+                                                <option value="Mademoiselle">Mademoiselle</option>   
+                                                <div class="text-danger">
+                                                    <small style="color:red" *ngIf="theCivility.errors?.['required'] ">
+                                                        *Entrez votre civilité
+                                                    </small>
+                                                </div>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-lg-6 flex-column d-flex"> 
+                                            <input #thePhone="ngModel" 
+                                                [(ngModel)]="phone" 
+                                                type="tel" id="phone" required 
+                                                name="phone"
+                                                class="form-control"
+                                                placeholder="0574925781"/>
+                                            <div class="text-danger">
+                                                <small *ngIf="thePhone.errors?.['required'] && (thePhone.dirty || thePhone.touched) ">
+                                                    *Entrez votre numéro 
+                                                </small>
+                                              </div>
+                                         </div>
+                                     
+                                    </div>
+                                    <div class="row justify-content-between text-left">
+                                        <div class="form-group col-lg-6 flex-column d-flex">
+                                            <input #theLastName="ngModel" 
+                                                type="text" id="lastName" name="lastName" 
+                                                [(ngModel)]="formData.nomDon" class="form-control" 
+                                                pattern="^[^0-9]*$" placeholder="Nom" required>
+
+                                                <div class="text-danger">
+                                                    <small *ngIf="theLastName.errors?.['pattern'] && (theLastName.dirty || theLastName.touched) ">
+                                                        *Entrez votre nom correctement
+                                                    </small>
+                                                  </div>
+                                                  <div class="text-danger">
+                                                    <small *ngIf="theLastName.errors?.['required'] && (theLastName.dirty || theLastName.touched) ">
+                                                        *Entrez votre nom 
+                                                    </small>
+                                                  </div>
+                                        </div>
+                                        <div class="form-group col-lg-6 flex-column d-flex">
+                                            <input 
+                                                #theFirstName="ngModel"type="text" id="firstName" 
+                                                name="firstName" [(ngModel)]="formData.prenomDon" 
+                                                class="form-control" pattern="^[^0-9]*$" 
+                                                placeholder="Prénom" required>
+
+                                            <div class="text-danger">
+                                                <small *ngIf="theFirstName.errors?.['pattern'] && (theFirstName.dirty || theFirstName.touched) ">
+                                                    *Entrez votre prenom correctement
+                                                </small>
+                                              </div>
+                                              <div class="text-danger">
+                                                <small *ngIf="theFirstName.errors?.['required'] && (theFirstName.dirty || theFirstName.touched) ">
+                                                    *Entrez votre prenom 
+                                                </small>
+                                              </div>
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="row justify-content-between text-left">
+                                        <div class="form-group col-lg-6 flex-column d-flex"> 
+                                           <select id="select-country" 
+                                            [(ngModel)]="formData.paysDon"
+                                            name="select-country" class=" form-control" 
+                                            required  
+                                            >
+                                                                 
+                                                <option value="Afghanistan">Afghanistan</option>
+                                                <option value="Åland Islands">Åland Islands</option>
+                                                <option value="Albania">Albania</option>
+                                                <option value="Algeria">Algeria</option>
+                                                <option value="American Samoa">American Samoa</option>
+                                                <option value="Andorra">Andorra</option>
+                                                <option value="Angola">Angola</option>
+                                                <option value="Anguilla">Anguilla</option>
+                                                <option value="Antarctica">Antarctica</option>
+                                                <option value="Antigua and Barbuda">Antigua and Barbuda</option>
+                                                <option value="Argentina">Argentina</option>
+                                                <option value="Armenia">Armenia</option>
+                                                <option value="Aruba">Aruba</option>
+                                                <option value="Australia">Australia</option>
+                                                <option value="Austria">Austria</option>
+                                                <option value="Azerbaijan">Azerbaijan</option>
+                                                <option value="Bahamas">Bahamas</option>
+                                                <option value="Bahrain">Bahrain</option>
+                                                <option value="Bangladesh">Bangladesh</option>
+                                                <option value="Barbados">Barbados</option>
+                                                <option value="Belarus">Belarus</option>
+                                                <option value="Belgium">Belgium</option>
+                                                <option value="Belize">Belize</option>
+                                                <option value="Benin">Benin</option>
+                                                <option value="Bermuda">Bermuda</option>
+                                                <option value="Bhutan">Bhutan</option>
+                                                <option value="Bolivia">Bolivia</option>
+                                                <option value="Bosnia and Herzegovina">Bosnia and Herzegovina</option>
+                                                <option value="Botswana">Botswana</option>
+                                                <option value="Bouvet Island">Bouvet Island</option>
+                                                <option value="Brazil">Brazil</option>
+                                                <option value="British Indian Ocean Territory">British Indian Ocean Territory</option>
+                                                <option value="Brunei Darussalam">Brunei Darussalam</option>
+                                                <option value="Bulgaria">Bulgaria</option>
+                                                <option value="Burkina Faso">Burkina Faso</option>
+                                                <option value="Burundi">Burundi</option>
+                                                <option value="Cambodia">Cambodia</option>
+                                                <option value="Cameroon">Cameroon</option>
+                                                <option value="Canada">Canada</option>
+                                                <option value="Cape Verde">Cape Verde</option>
+                                                <option value="Cayman Islands">Cayman Islands</option>
+                                                <option value="Central African Republic">Central African Republic</option>
+                                                <option value="Chad">Chad</option>
+                                                <option value="Chile">Chile</option>
+                                                <option value="China">China</option>
+                                                <option value="Christmas Island">Christmas Island</option>
+                                                <option value="Cocos (Keeling) Islands">Cocos (Keeling) Islands</option>
+                                                <option value="Colombia">Colombia</option>
+                                                <option value="Comoros">Comoros</option>
+                                                <option value="Congo">Congo</option>
+                                                <option value="Congo, The Democratic Republic of The">Congo, The Democratic Republic of The</option>
+                                                <option value="Cook Islands">Cook Islands</option>
+                                                <option value="Costa Rica">Costa Rica</option>
+                                                <option value="Cote D'ivoire" selected>Cote D'ivoire</option>
+                                                <option value="Croatia">Croatia</option>
+                                                <option value="Cuba">Cuba</option>
+                                                <option value="Cyprus">Cyprus</option>
+                                                <option value="Czech Republic">Czech Republic</option>
+                                                <option value="Denmark">Denmark</option>
+                                                <option value="Djibouti">Djibouti</option>
+                                                <option value="Dominica">Dominica</option>
+                                                <option value="Dominican Republic">Dominican Republic</option>
+                                                <option value="Ecuador">Ecuador</option>
+                                                <option value="Egypt">Egypt</option>
+                                                <option value="El Salvador">El Salvador</option>
+                                                <option value="Equatorial Guinea">Equatorial Guinea</option>
+                                                <option value="Eritrea">Eritrea</option>
+                                                <option value="Estonia">Estonia</option>
+                                                <option value="Ethiopia">Ethiopia</option>
+                                                <option value="Falkland Islands (Malvinas)">Falkland Islands (Malvinas)</option>
+                                                <option value="Faroe Islands">Faroe Islands</option>
+                                                <option value="Fiji">Fiji</option>
+                                                <option value="Finland">Finland</option>
+                                                <option value="France">France</option>
+                                                <option value="French Guiana">French Guiana</option>
+                                                <option value="French Polynesia">French Polynesia</option>
+                                                <option value="French Southern Territories">French Southern Territories</option>
+                                                <option value="Gabon">Gabon</option>
+                                                <option value="Gambia">Gambia</option>
+                                                <option value="Georgia">Georgia</option>
+                                                <option value="Germany">Germany</option>
+                                                <option value="Ghana">Ghana</option>
+                                                <option value="Gibraltar">Gibraltar</option>
+                                                <option value="Greece">Greece</option>
+                                                <option value="Greenland">Greenland</option>
+                                                <option value="Grenada">Grenada</option>
+                                                <option value="Guadeloupe">Guadeloupe</option>
+                                                <option value="Guam">Guam</option>
+                                                <option value="Guatemala">Guatemala</option>
+                                                <option value="Guernsey">Guernsey</option>
+                                                <option value="Guinea">Guinea</option>
+                                                <option value="Guinea-bissau">Guinea-bissau</option>
+                                                <option value="Guyana">Guyana</option>
+                                                <option value="Haiti">Haiti</option>
+                                                <option value="Heard Island and Mcdonald Islands">Heard Island and Mcdonald Islands</option>
+                                                <option value="Holy See (Vatican City State)">Holy See (Vatican City State)</option>
+                                                <option value="Honduras">Honduras</option>
+                                                <option value="Hong Kong">Hong Kong</option>
+                                                <option value="Hungary">Hungary</option>
+                                                <option value="Iceland">Iceland</option>
+                                                <option value="India">India</option>
+                                                <option value="Indonesia">Indonesia</option>
+                                                <option value="Iran, Islamic Republic of">Iran, Islamic Republic of</option>
+                                                <option value="Iraq">Iraq</option>
+                                                <option value="Ireland">Ireland</option>
+                                                <option value="Isle of Man">Isle of Man</option>
+                                                <option value="Israel">Israel</option>
+                                                <option value="Italy">Italy</option>
+                                                <option value="Jamaica">Jamaica</option>
+                                                <option value="Japan">Japan</option>
+                                                <option value="Jersey">Jersey</option>
+                                                <option value="Jordan">Jordan</option>
+                                                <option value="Kazakhstan">Kazakhstan</option>
+                                                <option value="Kenya">Kenya</option>
+                                                <option value="Kiribati">Kiribati</option>
+                                                <option value="Korea, Democratic People's Republic of">Korea, Democratic People's Republic of</option>
+                                                <option value="Korea, Republic of">Korea, Republic of</option>
+                                                <option value="Kuwait">Kuwait</option>
+                                                <option value="Kyrgyzstan">Kyrgyzstan</option>
+                                                <option value="Lao People's Democratic Republic">Lao People's Democratic Republic</option>
+                                                <option value="Latvia">Latvia</option>
+                                                <option value="Lebanon">Lebanon</option>
+                                                <option value="Lesotho">Lesotho</option>
+                                                <option value="Liberia">Liberia</option>
+                                                <option value="Libyan Arab Jamahiriya">Libyan Arab Jamahiriya</option>
+                                                <option value="Liechtenstein">Liechtenstein</option>
+                                                <option value="Lithuania">Lithuania</option>
+                                                <option value="Luxembourg">Luxembourg</option>
+                                                <option value="Macao">Macao</option>
+                                                <option value="Macedonia, The Former Yugoslav Republic of">Macedonia, The Former Yugoslav Republic of</option>
+                                                <option value="Madagascar">Madagascar</option>
+                                                <option value="Malawi">Malawi</option>
+                                                <option value="Malaysia">Malaysia</option>
+                                                <option value="Maldives">Maldives</option>
+                                                <option value="Mali">Mali</option>
+                                                <option value="Malta">Malta</option>
+                                                <option value="Marshall Islands">Marshall Islands</option>
+                                                <option value="Martinique">Martinique</option>
+                                                <option value="Mauritania">Mauritania</option>
+                                                <option value="Mauritius">Mauritius</option>
+                                                <option value="Mayotte">Mayotte</option>
+                                                <option value="Mexico">Mexico</option>
+                                                <option value="Micronesia, Federated States of">Micronesia, Federated States of</option>
+                                                <option value="Moldova, Republic of">Moldova, Republic of</option>
+                                                <option value="Monaco">Monaco</option>
+                                                <option value="Mongolia">Mongolia</option>
+                                                <option value="Montenegro">Montenegro</option>
+                                                <option value="Montserrat">Montserrat</option>
+                                                <option value="Morocco">Morocco</option>
+                                                <option value="Mozambique">Mozambique</option>
+                                                <option value="Myanmar">Myanmar</option>
+                                                <option value="Namibia">Namibia</option>
+                                                <option value="Nauru">Nauru</option>
+                                                <option value="Nepal">Nepal</option>
+                                                <option value="Netherlands">Netherlands</option>
+                                                <option value="Netherlands Antilles">Netherlands Antilles</option>
+                                                <option value="New Caledonia">New Caledonia</option>
+                                                <option value="New Zealand">New Zealand</option>
+                                                <option value="Nicaragua">Nicaragua</option>
+                                                <option value="Niger">Niger</option>
+                                                <option value="Nigeria">Nigeria</option>
+                                                <option value="Niue">Niue</option>
+                                                <option value="Norfolk Island">Norfolk Island</option>
+                                                <option value="Northern Mariana Islands">Northern Mariana Islands</option>
+                                                <option value="Norway">Norway</option>
+                                                <option value="Oman">Oman</option>
+                                                <option value="Pakistan">Pakistan</option>
+                                                <option value="Palau">Palau</option>
+                                                <option value="Palestinian Territory, Occupied">Palestinian Territory, Occupied</option>
+                                                <option value="Panama">Panama</option>
+                                                <option value="Papua New Guinea">Papua New Guinea</option>
+                                                <option value="Paraguay">Paraguay</option>
+                                                <option value="Peru">Peru</option>
+                                                <option value="Philippines">Philippines</option>
+                                                <option value="Pitcairn">Pitcairn</option>
+                                                <option value="Poland">Poland</option>
+                                                <option value="Portugal">Portugal</option>
+                                                <option value="Puerto Rico">Puerto Rico</option>
+                                                <option value="Qatar">Qatar</option>
+                                                <option value="Reunion">Reunion</option>
+                                                <option value="Romania">Romania</option>
+                                                <option value="Russian Federation">Russian Federation</option>
+                                                <option value="Rwanda">Rwanda</option>
+                                                <option value="Saint Helena">Saint Helena</option>
+                                                <option value="Saint Kitts and Nevis">Saint Kitts and Nevis</option>
+                                                <option value="Saint Lucia">Saint Lucia</option>
+                                                <option value="Saint Pierre and Miquelon">Saint Pierre and Miquelon</option>
+                                                <option value="Saint Vincent and The Grenadines">Saint Vincent and The Grenadines</option>
+                                                <option value="Samoa">Samoa</option>
+                                                <option value="San Marino">San Marino</option>
+                                                <option value="Sao Tome and Principe">Sao Tome and Principe</option>
+                                                <option value="Saudi Arabia">Saudi Arabia</option>
+                                                <option value="Senegal">Senegal</option>
+                                                <option value="Serbia">Serbia</option>
+                                                <option value="Seychelles">Seychelles</option>
+                                                <option value="Sierra Leone">Sierra Leone</option>
+                                                <option value="Singapore">Singapore</option>
+                                                <option value="Slovakia">Slovakia</option>
+                                                <option value="Slovenia">Slovenia</option>
+                                                <option value="Solomon Islands">Solomon Islands</option>
+                                                <option value="Somalia">Somalia</option>
+                                                <option value="South Africa">South Africa</option>
+                                                <option value="South Georgia and The South Sandwich Islands">South Georgia and The South Sandwich Islands</option>
+                                                <option value="Spain">Spain</option>
+                                                <option value="Sri Lanka">Sri Lanka</option>
+                                                <option value="Sudan">Sudan</option>
+                                                <option value="Suriname">Suriname</option>
+                                                <option value="Svalbard and Jan Mayen">Svalbard and Jan Mayen</option>
+                                                <option value="Swaziland">Swaziland</option>
+                                                <option value="Sweden">Sweden</option>
+                                                <option value="Switzerland">Switzerland</option>
+                                                <option value="Syrian Arab Republic">Syrian Arab Republic</option>
+                                                <option value="Taiwan">Taiwan</option>
+                                                <option value="Tajikistan">Tajikistan</option>
+                                                <option value="Tanzania, United Republic of">Tanzania, United Republic of</option>
+                                                <option value="Thailand">Thailand</option>
+                                                <option value="Timor-leste">Timor-leste</option>
+                                                <option value="Togo">Togo</option>
+                                                <option value="Tokelau">Tokelau</option>
+                                                <option value="Tonga">Tonga</option>
+                                                <option value="Trinidad and Tobago">Trinidad and Tobago</option>
+                                                <option value="Tunisia">Tunisia</option>
+                                                <option value="Turkey">Turkey</option>
+                                                <option value="Turkmenistan">Turkmenistan</option>
+                                                <option value="Turks and Caicos Islands">Turks and Caicos Islands</option>
+                                                <option value="Tuvalu">Tuvalu</option>
+                                                <option value="Uganda">Uganda</option>
+                                                <option value="Ukraine">Ukraine</option>
+                                                <option value="United Arab Emirates">United Arab Emirates</option>
+                                                <option value="United Kingdom">United Kingdom</option>
+                                                <option value="United States">United States</option>
+                                                <option value="United States Minor Outlying Islands">United States Minor Outlying Islands</option>
+                                                <option value="Uruguay">Uruguay</option>
+                                                <option value="Uzbekistan">Uzbekistan</option>
+                                                <option value="Vanuatu">Vanuatu</option>
+                                                <option value="Venezuela">Venezuela</option>
+                                                <option value="Viet Nam">Viet Nam</option>
+                                                <option value="Virgin Islands, British">Virgin Islands, British</option>
+                                                <option value="Virgin Islands, U.S.">Virgin Islands, U.S.</option>
+                                                <option value="Wallis and Futuna">Wallis and Futuna</option>
+                                                <option value="Western Sahara">Western Sahara</option>
+                                                <option value="Yemen">Yemen</option>
+                                                <option value="Zambia">Zambia</option>
+                                                <option value="Zimbabwe">Zimbabwe</option>
+                                            </select>
+                                        </div>
+                                              
+                                        <div class="form-group col-lg-6 flex-column d-flex"> 
+                                            <input 
+                                                #theCity="ngModel" type="text" id="city" 
+                                                name="city" [(ngModel)]="formData.villeDon" 
+                                                class="form-control" pattern="^[^0-9]*$" 
+                                                placeholder="ville" required>
+                                            <div class="text-danger">
+                                                <small style="color:red" *ngIf="theCity.errors?.['pattern'] && (theCity.dirty || theCity.touched) ">
+                                                    *Entrez le nom d'une ville correct
+                                                </small>
+                                              </div>
+                                              <div class="text-danger">
+                                                <small style="color:red" *ngIf="theCity.errors?.['required'] && (theCity.dirty || theCity.touched) ">
+                                                    *Entrez votre ville 
+                                                </small>
+                                              </div>
+                                            <br>
+                                        </div>
+                                    </div>
+                                   
+                                   <div class="px-4">
+                                        <a (click)="switchPage(true, false, false)"><button  style ="text-align:center" type="button" class="btn_back btn">Retour</button></a>
+                                        <a (click)="switchPage(false, false, true)">
+                                            <button style ="text-align:center"  [disabled]="!organisationFieldIsCorrect() || !isMultipleOf5() || !theLastName.valid || !theFirstName.valid || !theCity.valid  || !theCivility.valid || !thePhone.valid"
+                                                type="button" class="btn_next btn ">
+                                                Suivant
+                                            </button>
+                                        </a>
+                                   </div>
+                               
+                                </div>
+                    
+                </div>
+
+                <!--=====================================================-->
+                <!--===================//ANCHOR -  RECAP ================-->
+                <!--=====================================================-->
+                <div  *ngIf="isRecap" class="col-sm-9  p-4 rounded-4 recapNoAnonymous"
+                    style="background-color: #FFF5EB">
+
+                    <h3 class="fw-bold text-center">FAIRE UN DON NON ANONYME</h3>
+                    <div class="text-center">
+                        <img class="rameau mb-2" src="assets/image/rameau.png" alt="Rameau">
+                    </div>
+                       
+                            <div class="row justify-content-between text-left ">
+                                <div class="form-group col-sm-6 flex-column d-flex my-0 " ><p style="font-weight:800;font-size:110%">Civilité: <span style="font-family:'Poppins';font-size:95%;font-weight:10">{{formData.civiliteDon}}</span></p></div>
+                                <div class="form-group col-sm-6 flex-column d-flex my-0 "> <p style="font-weight:800;font-size:110%">Numéro: <span style="font-family:'Poppins';font-size:95%;font-weight:10">{{formData.contactDon}}</span></p> </div>
+                            </div>
+                            <div class="row justify-content-between text-left ">
+                                    <div class="form-group col-sm-6 flex-column d-flex my-0"><p style="font-weight:800;font-size:110%">Montant: <span style="font-family:'Poppins';font-size:95%;font-weight:10">{{formData.montantDon}} F</span></p></div>
+                                    <div class="form-group col-sm-6 flex-column d-flex my-0"><p style="font-weight:800;font-size:110%">Type de don: <span style="font-family:'Poppins';font-size:95%;font-weight:10">{{typeLibelle}}</span></p></div>
+                            </div>
+                            <div class="row justify-content-between text-left ">
+                                <div class="form-group col-sm-6 flex-column d-flex my-0"><p style="font-weight:800;font-size:110%">Nom: <span style="font-size:95%;font-weight:10">{{formData.nomDon}}</span></p></div>
+                                <div class="form-group col-sm-6 flex-column d-flex my-0"><p style="font-weight:800;font-size:110%">Prénom: <span style="font-size:95%;font-weight:10">{{formData.prenomDon}}</span></p></div>
+                            </div>
+                            <div class="row justify-content-between text-left ">
+    
+                                <div class="form-group col-sm-6 flex-column d-flex my-0"> <p style="font-weight:800;font-size:110%">Pays: <span style="font-family:'Poppins';font-size:95%;font-weight:10">{{formData.paysDon}}</span></p> </div>
+                                <div class="form-group col-sm-6 flex-column d-flex my-0"><p style="font-weight:800;font-size:110%">Ville: <span style="font-family:'Poppins';font-size:95%;font-weight:10">{{formData.villeDon}}</span></p></div>
+                            </div>
+                            <div class="row justify-content-between text-left ">
+                                <div class="form-group col-sm-6 flex-column d-flex my-0"> <p style="font-weight:800;font-size:110%" *ngIf="isOrga">Organisation: <span style="font-family:'Poppins';font-size:95%;font-weight:10">{{formData.organisationDon}}</span></p> </div>
+                            </div><br>
+                           
+                           <div>
+                                <a (click)="switchPage(false, true, false)"><button  type="button" class="btn_back btn">Retour</button></a>
+                                <a>
+                                    <button   
+                                        type="submit" *ngIf="!isSubmitting" class="btn_next btn ">
+                                        Je fais mon don
+                                    </button>
+                                </a>
+                                    <div style ="float:right;padding-right:03%;margin-top: -06%;" *ngIf="isSubmitting" class="spinner-border text-dark" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                           </div>
+                           
+                </div>
+
+
+            </div>
+            
+    </form>
+       </div>
+       
+</div>

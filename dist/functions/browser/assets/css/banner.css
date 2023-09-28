@@ -1,0 +1,25 @@
+/* Application de la police de caractères Open Sans à tous les éléments du corps de la page */
+body {
+  font-family: 'Poppins';
+}
+
+.opacity{
+  background-color: rgba(0, 0, 0,0.5);
+  min-height: 100vh;
+	/* height: max-content; */
+	width: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+.text{
+    position: relative; 
+    top: -350px;
+    color: white !important;;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 40px;
+    text-align: center;
+    align-items: center;
+}

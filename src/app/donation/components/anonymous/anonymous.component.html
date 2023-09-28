@@ -1,0 +1,154 @@
+<app-header></app-header>
+
+<div class="image-container">
+
+    <div class="container-fluid d-flex align-items-start justify-content-center">
+        
+        <form class="mb-3 marginTopForm d-flex align-items-center justify-content-center"  #registerForm="ngForm" (ngSubmit)="onSubmit()"  novalidate>
+            <div class="row d-flex align-items-center justify-content-center ">
+
+                <!--=====================================================-->
+                <!--======================= FORM ========================-->
+                <!--=====================================================-->
+                <div *ngIf="isForm" class="col-sm-6 p-4 rounded-4 min_width_form"
+                    style="background-color: #FFF5EB" >
+                    <h3 class="fw-bold text-center">FAIRE UN DON ANONYME</h3>
+                    <div class="text-center">
+                        <img class="rameau mb-2" src="assets/image/rameau.png" alt="Rameau">
+                    </div>
+                    
+                    <div class="mb-3" >
+                        <input (click)="getAmount(500)" 
+                            #theFirstAmount [(ngModel)]="firstAmount"  
+                            type="radio" class="btn-check" name="firstAmount" 
+                            id="firstAmount" autocomplete="off" required>
+                        <label class="btn btn-sm fw-bold rounded-0 " style="text-align:center;width:35%;float:left;font-size:110%" for="firstAmount"><span class="number">500F</span></label>
+                            
+                        <input (click)="getAmount(1000)" 
+                            #theSecondAmount [(ngModel)]="secondAmount" 
+                            type="radio" class="btn-check" name="secondAmount" 
+                            id="secondAmount" autocomplete="off" required>
+                        <label class="btn btn-sm fw-bold rounded-0 " style="text-align:center;width:30%;float:left;font-size:110%" for="secondAmount"><span class="number">1000F</span></label>
+                            
+                        <input (click)="getAmount(2500)" 
+                            #theThirdPrice [(ngModel)]="thirdAmount" 
+                            type="radio" class="btn-check" name="thirdAmount" 
+                            id="thirdAmount" autocomplete="off" required>
+                        <label class="btn btn-sm fw-bold rounded-0 " style="text-align:center;width:35%;float:left;font-size:110%"  for="thirdAmount"><span class="number">2500F</span></label>
+                    
+                    </div><br><br>
+                    <div class="mb-3">                       
+                        <input  style="width:100%;"
+                            FormControlName="argent" 
+                            pattern="^[0-9]{1,25}$" type="number" min="100"   
+                            #theAmount="ngModel" 
+                            [(ngModel)]="formData.montantDon" 
+                            class="form-control" 
+                            onkeypress="return event.charCode >= 48 && event.charCode <= 57" 
+                            name="price" placeholder="Montant" required [readonly]="isFixed">
+                        
+                            <div class="text-danger">
+                                <small  *ngIf="theAmount.touched && !isMultipleOf5()">
+                                    *Entrez un montant multiple de 5
+                                </small>
+                            </div>
+                        <div class="text-danger">
+                            <small  *ngIf="theAmount.errors?.['required'] && (theAmount.dirty || theAmount.touched) ">
+                                *Entrez un montant de don
+                            </small>
+                        </div>
+                        
+                        <div class="text-danger" *ngIf=" theAmount.errors?.['min'] && (theAmount.dirty || theAmount.touched)">
+                            <small>
+                            *Entrez au moins 100 Francs
+                            </small>
+                            
+                        </div>
+                        
+                    
+                    </div>
+                
+                    <div class="mb-3">
+                        <select style="width:100%;height:40px;font-family:'Poppins';color:black"
+                            (change)="onChangeDonationType(theTypeValue.value);"    
+                            [(ngModel)]="typeValue" 
+                            #theTypeValue="ngModel"
+                            name ="type"   
+                            form-select mt-3 required >
+                            <option *ngFor="let donationType of donationTypes.types_dons" value="{{donationType.id}}" selected >{{ donationType.libelle }}</option>
+                            <option value=0 selected >Autre</option>
+                        </select><br><br>
+                    <div class="invalid-feedback">
+                            <small *ngIf="theTypeValue.errors">
+                                *Choisissez un type de don
+                            </small>
+                    </div>
+                    <input [(ngModel)]="customType" style="width:100%; ; height:40px; border-radius:4px" 
+                        *ngIf="typeIsOther" type="text" name="input" 
+                        placeholder="Entrez votre type de don"><br>
+                
+                    </div>
+                
+                    <a (click)="goToDonationTypeMenu()">
+                        <button type="button" style="text-align: center;float:left" class="btn_back btn  btn btn_back fw-bold">
+                            Retour
+                        </button>
+                    </a>
+                    <a (click)="switchPage()">
+                        <button style="text-align: center;float:right" type="button"
+                            [disabled]="customTypeFieldIsCorrect() || theAmount.errors ||  (theAmount.hasError('min500') || theAmount.touched) && theAmount.errors || theAmount.invalid && (theAmount.dirty || theAmount.touched) || theTypeValue.errors || !isMultipleOf5()"  
+                             class="btn_next btn fw-bold">
+                            Suivant
+                        </button>
+                    </a>
+                </div>
+                
+                <!--=====================================================-->
+                <!--======================= RECAP =======================-->
+                <!--=====================================================-->
+                <div *ngIf="!isForm" class="col-sm-6 p-4 rounded-4 recapAnonymous" 
+                    style="background-color: #FFF5EB" >
+                    <h3 class="fw-bold text-center ">RECAPITULATIF</h3>
+                    <div class="text-center">
+                        <img class="rameau mb-2" src="assets/image/rameau.png" alt="Rameau">
+                    </div>
+                    <div class="row justify-content-between text-left ">
+                        <div class="form-group col-md-6 flex-column" style="width:100%">
+                            <p style="float:left;padding-left:05%;font-family:'Poppins';font-weight:800;font-size:110%">
+                                Montant: 
+                                <span style="font-family:'Poppins';font-size:95%;font-weight:10">
+                                    {{formData.montantDon}} F
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="row justify-content-between text-left">
+                        <div  class="form-group col-md-6 flex-column" style="width:100%">
+                            <p style="float:left;padding-left:05%;font-family:'Poppins';font-weight:800;font-size:110%">
+                                Type de don: 
+                                <span style="font-family:'Poppins';font-size:95%;font-weight:10">
+                                    {{typeLibelle}}
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+    
+                    <a (click)="switchPage()">
+                        <button type="button" style="text-align: center;float:left" class="btn_back btn  fw-bold">
+                            Retour
+                        </button>
+                    </a>
+                    <a>
+                        <button style="text-align: center;float:right" 
+                            type="submit"
+                            class="btn_next btn fw-bold">
+                            Je fais mon don
+                        </button>
+                    </a>
+                </div>
+            </div>
+        </form>
+    
+    </div>
+       
+</div>

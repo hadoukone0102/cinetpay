@@ -1,0 +1,16 @@
+.card{
+    width: 250px;
+    border-radius: 30px;
+    border-bottom: 52px solid green;
+}
+
+.card-body{
+    border-radius:0 0 30px 30px;
+}
+
+.bottom-text {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 260px;
+  }

@@ -1,0 +1,51 @@
+<app-header></app-header>
+<div class="image-container">
+        <div class="container-fluid d-flex align-items-start justify-content-center">
+          <div class="marginTopMenu row ">
+
+            <div class="col-12 mb-4 text-white text-center">
+                 <p class="fw-bold h1_fix" >Quel don souhaitez vous effectuer ?</p>
+            </div>
+            
+            <div class="col-12">
+                <div class="row d-flex align-items-center justify-content-center">
+                  
+                  <div (click)="goToAnonymous()" style="cursor: pointer;" class="col-sm-6 card me-3 mb-3 text-center text-white" [ngStyle]="{'background-color': couleurFond}">
+                      <div class="card-body">
+                        <div class="messe" style="width:50%;height:10%;margin:0 auto">
+                            <i class="fa fa-eye-slash h4_lg text-black"></i>
+                          </div>
+                            <h2 class="h4 fw-bold text-center">ANONYME</h2>
+                            <p class="card-text">
+                              Faites un don ou votre nom n'est 
+                              pas révélé et vous serez inconnu
+                              pour votre don.
+                            </p>
+                            <a class="bottom-text text-white text-decoration-none h5 fw-bold" >Choisir</a>
+                      </div>
+                  </div>
+                  <div (click)="goToNoAnonymous()" style="cursor: pointer;" class="col-sm-6 card me-3 mb-3 text-center text-white" [ngStyle]="{'background-color': couleurFond}">
+                      <div class="card-body">
+                        <div class="messe" style="width:50%;height:10%;margin:0 auto">
+                            <i class="fa fa-eye h4_lg text-black"></i>
+                        </div>
+                            <h2 class="h4 fw-bold text-center">NON ANONYME</h2>
+                            <p class="card-text">
+                              Faites un don  ou  votre nom est 
+                              révelé et vous serez connu pour 
+                              votre don
+                            </p>
+                            <a  class="bottom-text text-white text-decoration-none h5 fw-bold">Choisir</a>
+                        </div>
+                  </div>
+
+                </div>
+         
+            </div>
+          </div>
+        </div>
+        
+  
+</div>
+
+

@@ -1,0 +1,61 @@
+<div>
+  <p class="h1 text-center my-3">Qu'est ce qui vous amène ?</p>
+</div>
+  <div class="container">
+    <div class="card mb-5" [ngStyle]="{'background-color': couleurFond} " style="">
+      <div class="card-body" data-bs-toggle="modal" data-bs-target="#exampleModal" style="cursor:pointer">
+        <div class="text-center"> <img src="assets/image/messe.png" alt=""></div>
+        <h1 class="h4 text-center fw-bold">MESSE</h1>
+        <p class="card-text">Faites votre demande de messe facilement en ligne.</p>
+        <a class="bottom-text text-center fw-bold text-decoration-none text-white">Choisir</a>
+      </div>
+    </div>
+    <div class="card mb-5" data-bs-toggle="modal" data-bs-target="#exampleModal" style="cursor:pointer" [ngStyle]="{'background-color': couleurFond} ">
+      <div class="card-body">
+        <div class="text-center"> <img src="assets/image/quete.png" alt=""></div>
+        <h1 class="h4 text-center fw-bold">QUETE</h1>
+        <p class="card-text">Effectuez très facilement votre quête en ligne .</p>
+        <a class="bottom-text text-center fw-bold text-decoration-none text-white">Choisir</a>
+      </div>
+    </div>
+    <div class="card mb-5" data-bs-toggle="modal" data-bs-target="#exampleModal" style="cursor:pointer" [ngStyle]="{'background-color': couleurFond} ">
+      <div class="card-body">
+        <div class="text-center"> <img src="assets/image/bapteme.png" alt=""></div>
+        <h1 class="h4 text-center fw-bold">BAPTEME</h1>
+        <p class="card-text">Faites la demande de bapteme pour votre bébé facilement en ligne.</p>
+        <a class="bottom-text text-center fw-bold text-decoration-none text-white">Choisir</a>
+      </div>
+    </div>
+    <div class="card mb-5" data-bs-toggle="modal" data-bs-target="#exampleModal" style="cursor:pointer" [ngStyle]="{'background-color': couleurFond} ">
+      <div class="card-body">
+        <div class="text-center"> <img src="assets/image/anneau.png" alt=""></div>
+        <h1 class="h4 text-center fw-bold">MARIAGE</h1>
+        <p class="card-text">Faites votre demande de mariage facilement en ligne.</p>
+        <a class="bottom-text text-center fw-bold text-decoration-none text-white">Choisir</a>
+      </div>
+    </div>
+    <div class="card mb-5" data-bs-toggle="modal" data-bs-target="#exampleModal" style="cursor:pointer" [ngStyle]="{'background-color': couleurFond} ">
+      <div class="card-body">
+        <div class="text-center"> <img src="assets/image/catechese.png" alt=""></div>
+        <h1 class="h4 text-center fw-bold">CATECHESE</h1>
+        <p class="card-text">Accédez à l'espace de la catéchèse en ligne.</p>
+        <a class="bottom-text text-center fw-bold text-decoration-none text-white">Choisir</a>
+      </div>
+    </div>
+    </div>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+         <div class="error">
+              <h1 style="font-weight:700;text-align:center">OUUUUPS!!!</h1>
+              <p style="font-size:120%;color:#FFD2A4;text-align:center;font-family:'Poppins'">Cette partie du site est momentanément indisponible. Celle-ci sera bientôt disponible. 
+                Seule la partie "Faire un don " est disponibl</p>
+         </div>
+         
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+          </div>
+        </div>
+      </div>
+    </div>

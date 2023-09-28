@@ -1,0 +1,164 @@
+/* .main{
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('../../../../assets/image/fondEglise.jpg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    padding: 100px 0 130px 0;
+} */
+
+.demand_container{
+    margin-top: 150px;
+    margin-bottom: 20px;
+    padding-top: 20px;
+    background-color: #FFF5EB;
+    border: none;
+    border-radius: 20px;
+    width: 500px;
+}
+
+.form-group{
+    background-color: #FFF5EB;
+    margin-bottom: 0;
+}
+
+
+.card{
+    margin: 50px 0;
+    border: none;
+    /* display: none; */
+}
+
+#lastName, #firstName, #phone , #intention, #date, #time{
+    width: 400px;
+    padding: .5rem;
+    border: solid 1px #D5D8DE;
+    background-color: #ffff;
+}
+
+#intentionTxt{
+    width: 300px;
+    height: 100px;
+}
+
+#eventName{
+    width: 300px;
+}
+
+#inputDefunt1{
+    width: 268px;
+}
+
+#inputDefunt2, #inputDefunt3{
+    width: 280px;
+}
+
+#inputDefunt{
+    width: 265px;
+    padding: .5rem;
+    border: solid 1px #D5D8DE;
+    background-color: #ffff;
+}
+
+#lastName:focus, #firstName:focus, #phone:focus , #intention:focus, #intentionTxt:focus, #date:focus, #time:focus{
+    outline: none;
+    border: solid 1px orange;
+    background-color: #ffff;
+}
+.form-group-mini-btn{
+    display: flex;
+    justify-content: flex-end;
+    width: 400px;
+}
+
+.form-group-mini-btn-1{
+    width: 400px
+}
+
+.form-group-mini-anonymous{
+    display: flex;
+    justify-content: flex-start;
+    width: 400px;
+}
+
+.form-group-mini-anonymous>label{
+    margin-bottom: 0;
+}
+
+.form-group-mini-anonymous>input{
+    width: 20px;
+    height: 20px;
+}
+
+.recap-title{
+    font-size: 20px;
+}
+.recap-data{
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* .active{
+    display: block;
+} */
+
+.progress{
+    height: 2rem;
+}
+
+.error-message{
+    color: red;
+}
+
+@media only screen and (max-width: 390px) {
+    /* Your CSS styles for small screens go here */
+    .demand_container{
+        width: 280px;
+    }
+
+    #lastName, #firstName, #phone , #intention, #intentionTxt, #date, #time{
+        width: 200px;
+    }
+
+    .form-group-mini-btn{
+        width: 200px;
+    }
+    
+    .form-group-mini-btn-1{
+        width: 200px
+    }
+    
+    .form-group-mini-anonymous{
+        width: 200px;
+    }
+    
+    /* Add more styles as needed */
+}
+
+@media only screen and (max-width: 440px) {
+    /* Your CSS styles for small screens go here */
+    .demand_container{
+        width: 300px;
+    }
+
+    #lastName, #firstName, #phone , #intention, #intentionTxt, #date, #time{
+        width: 280px;
+    }
+
+    .form-group-mini-btn{
+        width: 280px;
+    }
+    
+    .form-group-mini-btn-1{
+        width: 280px
+    }
+    
+    .form-group-mini-anonymous{
+        width: 280px;
+    }
+    
+    /* Add more styles as needed */
+}
+
+.recap-title{
+    color: #00000066;
+}

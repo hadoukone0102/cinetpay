@@ -1,0 +1,26 @@
+.textover{
+  font-weight:600;
+  width: 100%;
+  font-size: 50px;
+  color: white;
+  text-align: center;
+  align-items: center;
+}
+
+@media (max-width: 990px){
+  .textover{
+    font-size:250%;
+    margin-top: 25%;
+    text-align: center;
+    align-items: center;
+  }
+}
+@media (max-width: 590px){
+  .textover{
+    font-size:200%;
+    margin-top: 35%;
+    text-align: center;
+    align-items: center;
+  }
+}
+

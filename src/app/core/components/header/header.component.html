@@ -1,0 +1,60 @@
+
+   <nav  class="navbar fixed-top navbar-expand-lg navbar-dark p-md-3">
+    <div class="container  d-flex justify-content-between align-items-center">
+        <a (click)="goToHome()" style="cursor:pointer" class="navbar-brand">
+            <img src="assets/image/logo.png" class="logo" alt="logo de l'église Mukassa" title="Accueil">
+        </a>
+       
+        <button class="navbar-toggler border-0" type="button" style="background-color:black" data-bs-toggle="collapse" data-bs-target="#navbar-toggler-success" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button> 
+
+        <div class="align-self-center collapse navbar-collapse flex-fill  d-lg-flex justify-content-lg-between" id="navbar-toggler-success">
+            <div class="flex-fill mx-xl-5 mb-2">
+                <ul class="nav navbar-nav d-flex justify-content-between mx-xl-5 text-center text-dark">
+                    <!-- Button trigger modal -->
+  <!-- Modal -->
+ 
+                    <li class="nav-item">
+                        <a (click)="goToMesseType()" data-bs-toggle="modal" [ngStyle]="{'color': couleurFond}" data-bs-target="#exampleModal" style="cursor:pointer" class="nav-link px-3">Messe</a>
+                    </li>
+                    <li class="nav-item">
+                        <a  data-bs-toggle="modal" [ngStyle]="{'color': couleurFond}" data-bs-target="#exampleModal" style="cursor:pointer" class="nav-link px-3" >Quête</a>
+                    </li>
+                    <li class="nav-item">
+                        <a  data-bs-toggle="modal" [ngStyle]="{'color': couleurFond}" data-bs-target="#exampleModal" style="cursor:pointer" class="nav-link px-3" >Baptême</a>
+                    </li>
+                    <li class="nav-item">
+                        <a  data-bs-toggle="modal" [ngStyle]="{'color': couleurFond}" data-bs-target="#exampleModal" style="cursor:pointer" class="nav-link px-3" >Mariage</a>
+                    </li>
+                    <li class="nav-item">
+                        <a data-bs-toggle="modal" [ngStyle]="{'color': couleurFond}" data-bs-target="#exampleModal" style="cursor:pointer" class="nav-link px-3" >Catechèse</a>
+                    </li>
+                    <li *ngIf="!isHome()" class="nav-item" >
+                        <a class="nav-link fw-bold px-3" (click)="goToDonationType()"  [ngStyle]="{'color': couleurFond}" style="cursor:pointer;">Dons</a>
+                    </li>
+                </ul>
+            </div>
+           <div class="don">
+            <li *ngIf="isHome()">
+              <button  (click)="goToDonationType()"  [ngStyle]="{'background-color': couleurFond}" class="button-don">Faire un don</button>
+            </li>
+           </div>
+        </div>
+    </div>
+</nav>
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+       <div class="error">
+            <h1 style="font-weight:700;text-align:center">OUUUUPS!!!</h1>
+            <p style="font-size:120%;color:#f77f07;text-align:center;font-family:'Poppins'"> Cette partie du site est momentanément indisponible. Celle-ci sera bientôt disponible. 
+                Seule la partie "Faire un don " est disponible</p>
+       </div>
+       
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" style="background-color:green;color:white" data-bs-dismiss="modal">Fermer</button>
+        </div>
+      </div>
+    </div>
+  </div>

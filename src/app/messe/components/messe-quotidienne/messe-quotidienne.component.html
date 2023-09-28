@@ -1,0 +1,465 @@
+<app-header></app-header>
+<div class="image-container">
+    <div class="container d-flex justify-content-center align-items-center">
+        <div class="container demand_container">
+            <h1 class="text-center text-dark">
+                DEMANDE MESSE QUOTIDIENNE
+            </h1>
+            
+            <div class="container progress_container pt-3">
+                <div class="progress">
+                  <div class="progress-bar bg-warning" role="progressbar" [style.width]="(currentStep ) * 25 + '%'">
+                    {{ currentStep === 1 ? 'Information' : currentStep === 2 ? 'Intention' : currentStep === 3 ? 'Date & heure' : 'Récapitulatif' }}
+                  </div>
+                </div>
+            </div>
+
+            <div class="container progress_container"></div>
+            <form class="form data-multi-step" #registerForm="ngForm" (ngSubmit)="onSubmit()">
+                <!-- pour le premier -->
+                <div class="card active" *ngIf="currentStep === 1">
+                    <div class="form-group d-flex flex-column justify-content-center align-items-center gap-3">
+
+                        <!-- pour le boutton -->
+                        <div class="form-group-mini-anonymous gap-4">
+                            <input type="checkbox" name="checkAnonymous" id="checkAnonymous" [(ngModel)]="this.formData.isAnonymous">
+                            <label for="anonymousLabel m-0">Garder l'anonymat</label>
+                        </div>
+                        <!-- pour le boutton -->
+
+                        <!-- pour le prenom -->
+                        <div class="form-group-mini">
+                            <input type="text" name="lastName" #theLastName="ngModel" id="lastName" placeholder="Nom" [(ngModel)]="this.formData.lastNameMr" [disabled]="checkAnonymous()" required>
+                            <div *ngIf="theLastName.errors?.['required'] && (theLastName.dirty || theLastName.touched)" class="error-message">
+                                Ce champ est obligatoire.
+                            </div>
+                        </div>
+                        <!-- pour le boutton -->
+
+                        <!-- pour le nom -->
+                        <div class="form-group-mini">
+                            <input type="text" name="firstName" #theFirstName="ngModel" id="firstName" placeholder="Prénoms" [(ngModel)]="this.formData.firstNameMr" [disabled]="checkAnonymous()" required>
+                            <div *ngIf="theFirstName.errors?.['required'] && (theFirstName.dirty || theFirstName.touched)" class="error-message">
+                                Ce champ est obligatoire.
+                            </div>
+                        </div>
+                        <!-- pour le nom -->
+
+                        <!-- pour le numero -->
+                        <div class="form-group form-group-mini">
+                            <input
+                             type="tel"
+                             name="phone" 
+                             #theContact="ngModel" 
+                             onkeypress="return event.charCode >= 48 && event.charCode <= 57" 
+                             id="phone" 
+                             class="form-control"
+                             placeholder="Contact" 
+                             [(ngModel)]="this.formData.contactMr" 
+                             required
+                            >
+                            <div *ngIf="theContact.errors?.['required'] && (theContact.dirty || theContact.touched)" class="error-message">
+                                Ce champ est obligatoire.
+                            </div>
+                        </div>
+                        <!-- pour le numero -->
+
+                        <!-- pour le boutton suivant -->
+                        <div class="form-group-mini-btn">
+                            <button type="button" (click)="checkNext()" data-next class="data-next btn btn-dark" [disabled]="formData.lastNameMr=='' && formData.firstNameMr == '' && formData.contactMr == ''">Suivant</button>
+                        </div>
+                        <!-- pour le boutton retour -->
+
+                    </div>
+                </div>
+                <!-- pour le premier -->
+
+                <!-- pour le second -->
+                    <div class="card" *ngIf="currentStep === 2">
+                        <div class="form-group d-flex flex-column justify-content-center align-items-center gap-3">
+
+                            <!-- pour le type d'intention -->
+                            <div class="form-group-mini">
+                                <select 
+                                    #theIntentionType="ngModel"
+                                    name="intention" 
+                                    id="intention" 
+                                    class="combobox" 
+                                    (change)="displaytemplate()"
+                                    [(ngModel)]="formData.request_type" 
+                                    required
+                                >
+                                    <option value=0 selected>Type d'intention</option>
+                                    <option value=1 >Autre</option>
+                                    <option value=2 >Action de grace</option>
+                                    <option value=3 >Défunts</option>
+                                </select>
+                                <div *ngIf="theIntentionType.errors?.['required'] && (theIntentionType.dirty || theIntentionType.touched)" class="error-message">
+                                    Ce champ est obligatoire.
+                                </div>
+                            </div>
+                            <!-- pour le type d'intention -->
+
+                            <!-- 
+                                //////////////////////////////////////////
+                                    Input field to add defunt
+                                //////////////////////////////////////////
+                             -->
+                             <!-- si l'utilisateur choisir le 3-->
+                            <div *ngIf="formData.request_type == 3" class="form-group-mini d-flex flex-column justify-content-center align-items-center gap-2">
+                                <!-- pour ajouter un defunt-->
+                                <div class="d-flex gap-2">
+                                    <input 
+                                        id="inputDefunt1"
+                                        type="text" 
+                                        name="defunt_name" 
+                                        placeholder="Nom du défunt" 
+                                        [(ngModel)]="formData.defunt1" 
+                                        [disabled]="formData.request_type != 3" 
+                                        required
+                                    >
+                                    <button type="button" class="btn btn-warning text-light" (click)="addDefunt()" [disabled]="this.defunt >=3">Ajouter nom</button>
+                                </div>
+                                <!-- pour ajouter un defunt-->
+                                
+                                <!-- pour ajouter un autre defunt-->
+                                <div *ngIf="this.defunt > 1" class="d-flex gap-2">
+                                    <input 
+                                        id="inputDefunt2"
+                                        type="text" 
+                                        name="defunt_name" 
+                                        placeholder="Nom du défunt" 
+                                        [(ngModel)]="formData.defunt2" 
+                                        [disabled]="formData.request_type != 3" 
+                                        required
+                                    >
+                                    <div class="btn btn-danger text-light" (click)="removeDefunt()">Supprimer</div>
+                                </div>
+                                <div *ngIf="this.defunt > 2" class="d-flex gap-2">
+                                    <input 
+                                        id="inputDefunt3"
+                                        type="text" 
+                                        name="defunt_name" 
+                                        placeholder="Nom du défunt" 
+                                        [(ngModel)]="formData.defunt3" 
+                                        [disabled]="formData.request_type != 3" 
+                                        required
+                                    >
+                                    <div class="btn btn-danger text-light" (click)="removeDefunt()">Supprimer</div>
+                                </div>
+                                 <!-- pour ajouter un autre defunt-->
+                            </div>
+
+                             <!-- si l'utilisateur choisir le 3-->
+
+                            
+
+                            <!--
+                            ////////////////////////////////////////////////////////////////////////////////////////////////
+                            //////////////////////////////// TEMPLATE ACTION DE GRACE 1 & 2 ////////////////////////////////
+                            ////////////////////////////////////////////////////////////////////////////////////////////////
+                            -->
+                                <!--
+                                    //////////////////////////////// TEMPLATE ACTION DE GRACE 1 ////////////////////////////////
+                                -->
+
+                                 <!-- si l'utilisateur choisir le 2-->
+
+                                <div *ngIf="this.isChosen && this.isTemplate == 2" class="form-group-mini d-flex justify-content-center align-items-start gap-3">
+                                    <div>
+                                        <textarea 
+                                        [ngClass]="isTemplateChosen?'border border-success':'border border-light'"
+                                            #templateActionDeGrace1
+                                            name="intentionText" 
+                                            id="intentionTxt" 
+                                            cols="21" 
+                                            rows="10" 
+                                            placeholder="Intension de messe" 
+                                            [disabled]="this.isTemplateDisabled"
+                                            required>{{formData.firstNameMr}}{{formData.lastNameMr}} rend grâce au seigneur pour tous ses bienfaits
+                                        </textarea>
+                                    </div>
+                                    <button
+                                        type="button" 
+                                        [disabled]="isTemplateChosen?true: false" 
+                                        (click)="captureTemplate(templateActionDeGrace1.value)" 
+                                        [ngClass]="isTemplateChosen?'btn btn-warning text-light':'btn btn-dark text-light'" >
+                                        {{isTemplateChosen?'Choisi':'Choisir'}}
+                                    </button>
+                                </div>
+
+                                <!--
+                                    //////////////////////////////// TEMPLATE ACTION DE GRACE 2 ////////////////////////////////
+                                -->
+
+                                <div *ngIf="this.isChosen && this.isTemplate == 2" class="form-group-mini d-flex justify-content-center align-items-start flex-column">
+                                    <div class="d-flex align-items-start gap-2 justify-content-center">
+                                        <textarea 
+                                            [ngClass]="isTemplate2Chosen?'border border-success':'border border-light'"
+                                            #templateActionDeGrace2
+                                            name="intentionText" 
+                                            id="intentionTxt" 
+                                            cols="21" 
+                                            rows="10" 
+                                            [disabled]="this.isTemplateDisabled"
+                                            placeholder="Intension de messe" 
+                                            required>{{formData.firstNameMr}} {{formData.lastNameMr}} rend grâce au seigneur à l’occasion de {{this.eventName}}</textarea>
+                                            <button
+                                                type="button" 
+                                                [disabled]="isTemplate2Chosen?true: false" 
+                                                (click)="captureTemplate1(templateActionDeGrace2.value)"  
+                                                [ngClass]="isTemplate2Chosen?'btn btn-warning text-light':'btn btn-dark text-light'" >
+                                                {{isTemplate2Chosen?'Choisi':'Choisir'}}
+                                            </button>
+                                    </div>
+                                    <div *ngIf="isTemplate2Chosen" class="d-flex align-items-center gap-2 justify-content-center">
+                                        <input 
+                                            type="text" 
+                                            name="eventName" 
+                                            id="eventName" 
+                                            placeholder="Nom de l'évènement" [(ngModel)]="eventName">
+                                            <button type="button" class="btn btn-warning" (click)="validateChoice(templateActionDeGrace2.value)">Valider</button>
+                                    </div>
+                                </div>
+                                 <!-- si l'utilisateur choisir le 3-->
+                            <!--
+                            ////////////////////////////////////////////////////////////////////////////////////////////////////
+                            //////////////////////////////// FIN TEMPLATE ACTION DE GRACE 1 & 2 ////////////////////////////////
+                            ////////////////////////////////////////////////////////////////////////////////////////////////////
+                            -->
+                            
+                            
+
+                            <!--
+                            ////////////////////////////////////////////////////////////////////////////////////////////////
+                            //////////////////////////////// TEMPLATE AUTRE DEMANDE 1 & 2 ////////////////////////////////
+                            ////////////////////////////////////////////////////////////////////////////////////////////////
+                            -->
+                                        <!--
+                                            //////////////////////////////// TEMPLATE AUTRE DEMANDE 1 ////////////////////////////////
+                                        -->
+                                        <div *ngIf="this.isChosen && this.isTemplate == 1" class="form-group-mini d-flex justify-content-center align-items-start flex-column">
+                                            <div class="d-flex align-items-start gap-2 justify-content-center">
+                                                <textarea 
+                                                    #templateAutreDemande
+                                                    [ngClass]="isTemplateChosen?'border border-success':'border border-light'"
+                                                    name="intentionText" 
+                                                    id="intentionTxt" 
+                                                    [disabled]="this.isTemplateDisabled"
+                                                    placeholder="Intension de messe" 
+                                                    required>{{formData.firstNameMr}} {{formData.lastNameMr}} demande aide, assistance, protection du seigneur pour {{this.personName}}
+                                                </textarea>
+                                                <button type="button" 
+                                                    [disabled]="isTemplateChosen?true: false" 
+                                                    (click)="captureTemplate(templateAutreDemande.value)"  
+                                                    [ngClass]="isTemplateChosen?'btn btn-warning text-light':'btn btn-dark text-light'" >{{isTemplateChosen?'Choisi':'Choisir'}}
+                                                </button>
+                                            </div>
+                                            <div *ngIf="isTemplateChosen" class="d-flex align-items-center gap-2 justify-content-center">
+                                                <input 
+                                                type="text" 
+                                                name="personName" 
+                                                id="eventName" 
+                                                placeholder="Nom de la personne" [(ngModel)]="personName">
+                                                <button type="button" class="btn btn-warning" (click)="validateChoice(templateAutreDemande.value)">Valider</button>
+                                            </div>
+                                        </div>
+                                        <!--
+                                            //////////////////////////////// TEMPLATE AUTRE DEMANDE 2 ////////////////////////////////
+                                        -->
+                                        <div *ngIf="this.isChosen && this.isTemplate == 1" class="form-group-mini d-flex justify-content-center align-items-center flex-column">
+                                            <div class="d-flex align-items-start gap-2 justify-content-cent">
+                                                <textarea 
+                                                    [ngClass]="isTemplate2Chosen?'border border-success':'border border-light'"
+                                                    #templateAutreDemande
+                                                    name="intentionText" 
+                                                    id="intentionTxt" 
+                                                    [disabled]="this.isTemplateDisabled"
+                                                    placeholder="Intension de messe" 
+                                                    required>{{formData.firstNameMr}} {{formData.lastNameMr}} demande guérison, délivrance, libération du seigneur pour {{this.personName2}}</textarea>
+                                                    <button type="button" 
+                                                    [disabled]="isTemplate2Chosen?true: false" 
+                                                    (click)="captureTemplate1(templateAutreDemande.value)"  
+                                                    [ngClass]="isTemplate2Chosen?'btn btn-warning text-light':'btn btn-dark text-light'" >{{isTemplate2Chosen?'Choisi':'Choisir'}}</button>
+                                            </div>
+                                            <div *ngIf="isTemplate2Chosen" class="d-flex align-items-center gap-2 justify-content-center">
+                                                <input 
+                                                type="text" 
+                                                name="personName2" 
+                                                id="eventName" 
+                                                placeholder="Nom de la personne" [(ngModel)]="personName2">
+                                                <button type="button" class="btn btn-warning" (click)="validateChoice(templateAutreDemande.value)">Valider</button>
+                                            </div>
+                                        </div>
+                            <!--
+                            ////////////////////////////////////////////////////////////////////////////////////////////////////
+                            //////////////////////////////// FIN TEMPLATE AUTRE DEMANDE 1 & 2 ////////////////////////////////
+                            ////////////////////////////////////////////////////////////////////////////////////////////////////
+                            -->
+                            
+                            
+                            <!--
+                            ///////////////////////////////////////////////////////////////////////////////////////
+                            //////////////////////////////// TEMPLATE DEFUNT 1 & 2 ////////////////////////////////
+                            ///////////////////////////////////////////////////////////////////////////////////////
+                            -->
+                                <!--
+                                    //////////////////////////////// TEMPLATE DEFUNT 1 ////////////////////////////////
+                                -->
+                                <div *ngIf="this.isChosen && this.isTemplate == 3" class="form-group-mini d-flex justify-content-center align-items-start gap-3">
+                                    <div >
+                                        <textarea 
+                                            #templateDefunt
+                                            [ngClass]="isTemplateChosen?'border border-success':'border border-light'"
+                                            name="intentionText" 
+                                            id="intentionTxt" 
+                                            [disabled]="this.isTemplateDisabled"
+                                            placeholder="Intension de messe" 
+                                            required>Repos éternel de {{
+                                                    formData.defunt1? formData.defunt1+'': formData.defunt1+''}}
+                                                    {{formData.defunt2? formData.defunt1 +', '+ formData.defunt2+'': formData.defunt2+''}}
+                                                    {{formData.defunt3? formData.defunt1+', '+formData.defunt2+', '+formData.defunt3+'': formData.defunt3+''}}
+                                                    demandé par {{formData.firstNameMr}}
+                                                    {{formData.lastNameMr}}
+                                                    </textarea>
+                                    </div>
+                                    <button 
+                                        type="button" 
+                                        [disabled]="isTemplateChosen?true: false" 
+                                        class="btn btn-warning text-light"
+                                        (click)="captureTemplate(templateDefunt.value)"  
+                                        [ngClass]="isTemplateChosen?'btn btn-warning text-light':'btn btn-dark text-light'">
+                                        {{isTemplateChosen?'Choisi':'Choisir'}}
+                                    </button>
+                                </div>
+                                <!--
+                                    //////////////////////////////// TEMPLATE DEFUNT 2 ////////////////////////////////
+                                -->
+                                <div *ngIf="this.isChosen && this.isTemplate == 3" class="form-group-mini d-flex justify-content-center align-items-start gap-3">
+                                    <div >
+                                        <textarea 
+                                            #templateDefunt
+                                            [ngClass]="isTemplate2Chosen?'border border-success':'border border-light'"
+                                            name="intentionText" 
+                                            id="intentionTxt" 
+                                            [disabled]="this.isTemplateDisabled"
+                                            placeholder="Intension de messe" 
+                                            required>{{formData.firstNameMr}} {{formData.lastNameMr}} prie pour le repos éternel de {{formData.defunt1? formData.defunt1+'.': formData.defunt1+''}} {{formData.defunt2? formData.defunt1 +''+ formData.defunt2+'.': formData.defunt2+''}} {{formData.defunt3? formData.defunt1+', '+formData.defunt2+', '+formData.defunt3+'.': formData.defunt3+''}}</textarea>
+                                    </div>
+                                    <button 
+                                        type="button"
+                                        [disabled]="isTemplate2Chosen?true: false" 
+                                        class="btn btn-warning text-light"
+                                        (click)="captureTemplate1(templateDefunt.value)"
+                                        [ngClass]="isTemplate2Chosen?'btn btn-warning text-light':'btn btn-dark text-light'">
+                                        {{isTemplate2Chosen?'Choisi':'Choisir'}}
+                                    </button>
+                                </div>
+                            <!--
+                            ///////////////////////////////////////////////////////////////////////////////////////////
+                            //////////////////////////////// FIN TEMPLATE DEFUNT 1 & 2 ////////////////////////////////
+                            ///////////////////////////////////////////////////////////////////////////////////////////
+                            -->
+
+                              
+                            <div class="form-group-mini-btn-1  d-flex flex-row justify-content-between gap-5">
+                                <button type="button" (click)="onPreviousClick()" data-previous class="data-previous btn btn-outline-dark">Retour</button>
+                                <button type="button" (click)="onNextClick()" data-next class="data-next btn btn-dark" [disabled]="formData.templateEr == ''">Suivant</button>
+                            </div>
+
+                            <!-- {{this.formData | json}} -->
+                        </div>
+                    </div>
+                <!-- pour le second -->
+
+                <!-- le troisième-->
+                    <div class="card" *ngIf="currentStep === 3">
+                        <div class="form-group d-flex flex-column align-items-center gap-3">
+                            <!--Pour consulter les programme de la paroise-->
+                            <div class="form-group-mini-anonymous-1 text-center">
+                                <a href="#" class="text-center text-warning">Consulter le programme de la paroisse</a>
+                            </div>
+                            <!--Pour consulter les programme de la paroise-->
+
+                            <!--Pour choisire sa date de Messe-->
+                            <div class="form-group-mini d-flex flex-column justify-content-center align-items-center">
+                                <label for="choose-date">Date de lecture</label>
+                                <input 
+                                    #theDate="ngModel"
+                                    type="date" 
+                                    name="date" 
+                                    id="date" 
+                                    [(ngModel)]="formData.startDateMr" 
+                                    required
+                                >
+                                <div *ngIf="theDate.errors?.['required'] && (theDate.dirty || theDate.touched)" class="error-message">
+                                    Ce champ est obligatoire.
+                                </div>
+                            </div>
+                             <!--Pour choisire sa date de Messe-->
+
+                            <div class="form-group-mini text-center">
+                                <a href="#" class="text-warning">Cliquez ici pour définir les heures de lecture de vos intensions</a>
+                            </div>
+                            <div class="form-group-mini-btn-1 d-flex flex-row justify-content-between gap-5">
+                                <button type="button" (click)="onPreviousClick()" data-previous class="data-previous btn btn-outline-dark">Retour</button>
+                                <button type="button" (click)="onNextClick()" data-next class="data-next btn btn-dark text-light" [disabled]="formData.startDateMr == ''">Suivant</button>
+                            </div>
+
+                            <!-- {{this.formData | json}} -->
+
+                        </div>
+                    </div>
+                <!-- le troisième-->
+
+                <!-- le quatrieme-->
+                    <div class="card" *ngIf="currentStep === 4">
+                        <div class="form-group d-flex flex-column gap-5">
+                            <div class="form-group-mini d-flex flex-row justify-content-center gap-5">
+                                <div class="form-group-mini-1 d-flex flex-column gap-5">
+                                    <div class="">
+                                        <h2 class="recap-title">Nom</h2>
+                                        <span class="recap-data">{{ formData.lastNameMr }}</span>                     
+                                    </div>
+                                    <div class="">
+                                        <h2 class="recap-title">Prénoms</h2>
+                                        <span class="recap-data">{{ formData.firstNameMr }}</span>                     
+                                    </div>
+                                    <div class="">
+                                        <h2 class="recap-title">Contact</h2>
+                                        <span class="recap-data">{{ formData.contactMr }}</span>                     
+                                    </div>
+                                </div>
+
+                                <div class="form-group-mini-2  d-flex flex-column gap-5">
+                                    <div class="">
+                                        <h2 class="recap-title">Type d'intention</h2>
+                                        <span class="recap-data">{{ formData.request_type == 1? 'Action de grace': formData.request_type==2? 'Autre demande':'Défunt' }}</span>
+                                    </div>
+                                    <div class="">
+                                        <h2 class="recap-title">Intention de messe</h2>
+                                        <span class="recap-data">{{ formData.templateEr }}</span>
+                                    </div>
+                                    <div class="d-flex flex-column gap-1">
+                                        <h2 class="recap-title">Dates & heures de lecture</h2>
+                                        <span class="recap-data">{{ formData.startDateMr }}</span>
+                                        <!-- <span class="recap-data">{{ collectedData.stepThree.time }}</span> -->
+                                        <a href="" class="text-warning">Consulter les heures de lecture</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group-mini-btn-3 d-flex flex-row justify-content-center gap-5">
+                                <button type="button" (click)="onPreviousClick()" data-previous class="data-previous btn btn-outline-dark">Retour</button>
+                                <button type="submit" class="btn btn-warning text-light">Je fais ma demande de messe (3.300 Fcfa).</button>
+                            </div>
+                        </div>
+
+                        <!-- {{this.formData | json}} -->
+                    </div>
+                <!-- le quatrieme-->
+
+            </form>
+        </div>
+    </div>
+</div>
+

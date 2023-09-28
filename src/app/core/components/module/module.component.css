@@ -1,0 +1,37 @@
+.card-text{
+    font-size:90%;
+}
+
+.card{
+    width: 210px;
+    height: 250px;
+    border-radius: 30px;
+}
+
+.card-body{
+    border-bottom: 30px solid green;
+    border-radius:0 0 30px 30px;
+}
+
+.bottom-text {
+    position: absolute;
+    bottom: 05px;
+    left: 0;
+    right: 0;
+  }
+ 
+.card-body  img{
+    width:50px;
+    height:55px;
+}
+
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 auto;
+    max-width: 1200px;
+    padding: 05px;
+    box-sizing: border-box;
+    align-items: center;
+    justify-content: space-around;
+}

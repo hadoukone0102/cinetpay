@@ -1,0 +1,102 @@
+/* @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap'); */
+@import url('https://fonts.googleapis.com/css?family=Poppins&display=swap');
+
+*{
+  font-family: 'Poppins';
+}
+
+.marginTopForm{
+    margin-top: 140px;
+}
+
+.marginTopMenu{
+    margin-top: 200px;
+}
+
+.image-container{
+    background-image:url('../image/mukasa.jpg');
+    min-height: 100vh;
+    background-position: center center;
+    background-size: cover;
+    position: relative;
+    /* height: max-content; */
+}
+
+.btn_back{
+    background-color: gainsboro;
+    color: black;
+}
+
+.btn_next{
+    background-color:#04C800;
+    color:white;
+    float: right;
+}
+
+.btn_next:hover {
+    background-color:orange !important;
+    color:white;
+}
+
+.h5_lg{
+    font-size: 3em;
+}
+.h4_lg{
+    font-size: 4em;
+}
+
+.h1_fix{
+    font-size: 2.5rem;
+}
+
+.min_width_form{
+    min-width: 100%;
+}
+
+/* ====================================================== */
+/* ================== Rameau responsive ================= */
+/* ====================================================== */
+.rameau{
+    height: auto;
+    width: 250px;
+}
+
+@media (max-width: 392px){
+    .rameau{
+        height: auto;
+        width: 170px;
+    }
+}
+
+/* ====================================================== */
+/* ============ Recap noanonymous responsive ============ */
+/* ====================================================== */
+.recapNoAnonymous{
+    min-width: 130%;
+}
+
+@media (max-width: 591px){
+    .recapNoAnonymous{
+        min-width: 100%;
+    }
+}
+
+/* ====================================================== */
+/* ============= Recap anonymous responsive ============= */
+/* ====================================================== */
+.recapAnonymous{
+    min-width: 130%;
+}
+
+@media (max-width: 392px){
+    .recapAnonymous{
+        min-width: 120%;
+    }
+}
+
+@media (max-width: 362px){
+    .recapAnonymous{
+        min-width: 105%;
+    }
+}
+

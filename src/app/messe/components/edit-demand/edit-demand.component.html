@@ -1,0 +1,54 @@
+<app-header></app-header>
+<div class="image-container d-flex justify-content-center align-items-center">
+        <div class="container demand_container d-flex justify-content-center align-items-center flex-column">
+            <div class="edit-container-title d-flex flex-row gap-5 justify-content-between align-items-center" style="width: 80%;">
+                <p class="" style="color: #414853; margin-bottom: 0;">
+                    Modifier une demande de messe
+                </p>
+                <span (click)="goToMesseType()" class="text-warning" style="display: inline-block; cursor: pointer;">X</span>
+            </div>
+
+            <form [formGroup]="form" (ngSubmit)="onSubmit()" class="d-flex justify-content-center align-items-center flex-column gap-3 mt-4">
+                <div class="card d-flex flex-column gap-3 justify-content-center align-items-center">
+                    <div class="input-code">
+                        <input type="text" name="code" formControlName="code" id="code" placeholder="Code">
+                    </div>
+                    <div class="button">
+                        <button (click)="onSubmit()" type="submit" class="btn btn-warning text-light" id="btn">Modifier</button>
+                    </div>
+                    <p class="note-text text-dark">
+                        Nb: La modification est seulement autorisée sur l'heure de la messe.
+                    </p>
+                </div>
+
+                <!-- <div class="card d-flex flex-column gap-3 justify-content-center align-items-center" [class.active]="currentStep === 2">
+                    <table class="table table-bordered border-warning border-end-warning">
+                        <thead class="border-warning border-end-warning">
+                          <tr>
+                            <th scope="col">Date</th>
+                            <th scope="col">Time</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>Mark</td>
+                            <td>Otto</td>
+                          </tr>
+                          <tr>
+                            <td>Jacob</td>
+                            <td>Thornton</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    <div class="button">
+                        <button type="submit" class="btn btn-warning text-light" id="btn">Modifier</button>
+                    </div>                   
+                </div> -->
+            </form>
+
+            
+
+
+
+           
+</div>
